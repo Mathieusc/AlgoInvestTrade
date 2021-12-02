@@ -30,18 +30,45 @@ actions = {
     }
 
 
-def calculate_profit(actions):
+def calculate_profit_euros(actions):
     """
-    param: {dict} of action costs in € and profits in %.
-    return: dict of profit per actions in €.
+    Param: 
+        Dict of action costs in € and profits in %.
+    Return: 
+        Dict of profit per actions in €.
     """
     profit = {}
+
     for action, percent in actions.items():
         profit[action] =  action * percent / 100
 
     return profit
 
-profit = calculate_profit(actions)
+
+def find_best_result(actions):
+    """
+    Param:
+        List of dict of the combinations of actions in €
+        and their profits in €.
+    Return:
+        List of dict.
+    """
+    print(max(actions[1]["profit"]))
+    # Ugly af
+    actions.pop()
+    actions.pop()
+    actions.pop()
+    actions.pop()
+    del actions[0]
+    for d in actions:
+        print(max(d["profit"]))
+        best_profit = max(d["profit"])
+        #print([key for (key, value) in d.items() if value == best_profit])
+        # I need to find the index of that max value since I have 2 dicts...
+        # Maybe convert the 2 dicts into a list and access the key by the index of the best value...
+
+
+profit = calculate_profit_euros(actions)
 
 # Seperating action costs and profit into individual lists.
 action_cost = [action for action in profit.keys()]
@@ -61,13 +88,13 @@ def try_all_combinations(action_list, profit_list):
 
     start = time.time()
 
-    for i in range(len(action_list) + 1):
+    for i in range(1, len(action_list) - 3):
         action_combination = itertools.combinations(action_list, i)
         results[i]["actions"] = [result for result in action_combination]
 
-    for i in range(len(profit_list) + 1):
         profit_combination = itertools.combinations(profit_list, i)
-        results[i]["profit"] = [sum(result) for result in profit_combination]
+        #results[i]["profit"] = [sum(result) * 100 / sum(results[i]["actions"][n]) for n, result in enumerate(profit_combination)]
+        results[i]["profit"] = [sum(result) - sum(results[i]["actions"][n]) / sum(results[i]["actions"][n]) for n, result in enumerate(profit_combination)]
 
     end = time.time()
     print(f"time: {end - start} seconds.")
@@ -79,9 +106,9 @@ def create_dict(actions):
     Setup empty dict for each actions.
 
     Return:
-        List of dict with empty values for actions and profit.
+        List of dict with empty values for actions and profit. 
     """
-    combinations = {"actions": None, "profit": None}
+    combinations = {"actions": "", "profit": ""}
     results = []
 
     for i in range(actions + 1):
@@ -91,12 +118,4 @@ def create_dict(actions):
     return results
 
 combinations = try_all_combinations(action_cost, profit)
-
-# total = 0
-# Total = [total := total + x for x in action_cost]
-# print(Total)
-
-print(combinations[10]["actions"][0])
-print(combinations[10]["profit"][0])
-
-# Find best profit next !
+best_invest = find_best_result(combinations)
