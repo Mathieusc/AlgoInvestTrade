@@ -1,9 +1,6 @@
-# Brute force algorithms to check :
-# SSS*, AlphaBeta, MinMax, A*, BackTrack, BackJump, BackMark, NC-AC(n), ForwardChecking…
-
-import itertools
+from itertools import combinations
 import timeit
-import time
+from time import time
 
 # Data :
 actions = {
@@ -53,13 +50,14 @@ def find_best_result(actions):
     Return:
         List of dict.
     """
-    print(max(actions[1]["profit"]))
+    
     # Ugly af
     actions.pop()
     actions.pop()
     actions.pop()
     actions.pop()
     del actions[0]
+    print(actions)
     for d in actions:
         print(max(d["profit"]))
         best_profit = max(d["profit"])
@@ -68,11 +66,11 @@ def find_best_result(actions):
         # Maybe convert the 2 dicts into a list and access the key by the index of the best value...
 
 
-profit = calculate_profit_euros(actions)
+#profit = calculate_profit_euros(actions)
 
 # Seperating action costs and profit into individual lists.
-action_cost = [action for action in profit.keys()]
-profit = [profit for profit in profit.values()]
+action_cost = [action for action in actions.keys()]
+profit = [profit for profit in actions.values()]
 
 
 def try_all_combinations(action_list, profit_list):
@@ -86,17 +84,25 @@ def try_all_combinations(action_list, profit_list):
     # Initialize dict for mapping.
     results = create_dict(len(action_list))
 
-    start = time.time()
+    start = time()
 
     for i in range(1, len(action_list) - 3):
-        action_combination = itertools.combinations(action_list, i)
+        action_combination = combinations(action_list, i)
         results[i]["actions"] = [result for result in action_combination]
 
-        profit_combination = itertools.combinations(profit_list, i)
+        profit_combination = combinations(profit_list, i)
+        #print([x for x in profit_combination])
+        # Percent
         #results[i]["profit"] = [sum(result) * 100 / sum(results[i]["actions"][n]) for n, result in enumerate(profit_combination)]
-        results[i]["profit"] = [sum(result) - sum(results[i]["actions"][n]) / sum(results[i]["actions"][n]) for n, result in enumerate(profit_combination)]
+        
+        # Return on invest (not accurate)
+        #results[i]["profit"] = [(sum(result) - sum(results[i]["actions"][n])) / sum(results[i]["actions"][n]) for n, result in enumerate(profit_combination)]
+        
+        # Profit in euros (what we need ?)
+        # Max value * Profit % // 100
+        results[i]["profit"] = [(sum(results[i]["actions"][n]) * sum(result)) / 100 for n, result in enumerate(profit_combination)]
 
-    end = time.time()
+    end = time()
     print(f"time: {end - start} seconds.")
 
     return results
