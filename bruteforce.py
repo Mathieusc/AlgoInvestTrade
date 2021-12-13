@@ -1,6 +1,6 @@
 """
 bruteforce.py tries all combinations possible of actions that cost less
-than 500€ and find the best profit in euros.
+than 500 euros and find the best profit in euros.
 The execution time for this method is also calculated.
 """
 
@@ -8,10 +8,12 @@ The execution time for this method is also calculated.
 from itertools import combinations
 from timeit import timeit
 from time import time
+from memory_profiler import profile
+
 
 start_time = time()
 
-# Data : (Cost in €, Profit in %)
+# Data : (Cost in euros, Profit in percent)
 actions = [
     (20, 5),
     (30, 10),
@@ -41,9 +43,11 @@ action_cost_list = [action[0] for action in actions]
 action_profit = {action[0]: (action[0] * action[1]) / 100 for action in actions}
 
 
+# @profile
 def bruteforce(action, profit):
     """
-    Try all combinations of actions below 500€.
+    Try all combinations of actions below 500 euros
+    using the combinations method from the itertools module.
     Return:
         tuple() - The single best combination of profit in euros and their actions.
     """
@@ -75,22 +79,21 @@ def execution_time(start, end):
 
 def display_best_profit(bruteforce_result):
     """
-    Display the best combination of actions in euros (total + each action)
+    Display the best combinations of actions in euros (total + each action)
     and the best profit in euros.
     """
-    display_best_profit = f"Combination of actions in euros : {find_best_profit[0]}\n\t\
-Profit : {find_best_profit[1]:.2f}€\n\t\
-Total cost : {sum(find_best_profit[0])}€"
-    print(display_best_profit)
+    best_profit = f"Best combination of actions in euros : {find_best_profit[0]}\n\
+Profit : {find_best_profit[1]:.2f} euros\n\
+Total cost : {sum(find_best_profit[0])} euros\n"
+    print(best_profit)
 
-
-find_best_profit = bruteforce(action_cost_list, action_profit)
-display_best_profit(find_best_profit)
-
-end_time = time()
-execution_time(start_time, end_time)
 
 # To use the timeit module instead uncomment this
 # Timeit() seems to be more precise than time()
 # bruteforce_time = timeit(lambda: bruteforce(action_cost_list, action_profit), number=1)
-# print(f"bruteforce = {bruteforce_time:.3f}")
+# print(f"The bruteforce method took {bruteforce_time:.3f} seconds.")
+
+find_best_profit = bruteforce(action_cost_list, action_profit)
+display_best_profit(find_best_profit)
+end_time = time()
+execution_time(start_time, end_time)
