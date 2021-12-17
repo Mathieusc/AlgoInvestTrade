@@ -44,6 +44,7 @@ def dataset(file):
 
 share_list = dataset("dataset1_Python+P7.csv")
 convert_list = [(int(float((x[0]))), float(x[1])) for x in share_list]
+# print(convert_list)
 
 # {Action: Profit} in euros dict :
 # action_profit = {action[0]: (action[0] * action[1]) / 100 for action in actions}
@@ -55,12 +56,20 @@ action_profit = [(action[0], (action[0] * action[1]) / 100) for action in action
 def dynamic_prog(budjet, actions):
     # Create an emtpy list for each action from 0 to 500 euros
     matrice = [[0 for x in range(budjet + 1)] for x in range(len(actions) + 1)]
+    # print(actions)
 
     # Loop through each actions :
     for i in range(1, len(actions) + 1):
+        print(actions[i - 1])
+        if actions[i - 1][0] < 0:
+            continue
         # Loop from 0 to 500 euros one by one :
         for budj in range(1, budjet + 1):
             if actions[i - 1][0] <= budj:
+                # print(actions[i - 1][0])
+                # print(budj - actions[i - 1][0])
+                matrice[i - 1][budj - actions[i - 1][0]]
+
                 matrice[i][budj] = max(
                     (actions[i - 1][1]) + matrice[i - 1][budj - actions[i - 1][0]],
                     matrice[i - 1][budj],
@@ -108,12 +117,12 @@ def execution_time(start, end):
     """
     Display the executime of the bruteforce method.
     """
-    execution_time = end_time - start_time
+    execution_time = end - start
     display_execution_time = f"The optimized method took {execution_time:.3f} seconds."
     print(display_execution_time)
 
 
-optimized_method = dynamic_prog(500, action_profit)
+optimized_method = dynamic_prog(500, convert_list)
 
 optimized_time = timeit(lambda: dynamic_prog(500, action_profit), number=1)
 display_optimized(optimized_method)
