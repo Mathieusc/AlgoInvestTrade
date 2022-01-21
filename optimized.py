@@ -1,3 +1,9 @@
+"""
+optimized.py finds the most optimal result for either 20, or 1000 actions (using datasets files) that cost less
+than 500 euros in total and find the best profit in euros.
+The execution time for this method is also calculated.
+"""
+
 from csv import reader
 from time import time
 
@@ -32,7 +38,7 @@ def dataset(file):
     Extract the data from the csv files.
     The columns 'name', 'price' and 'profit' from the files are returned as a list
     of tuples (name, price, profit).
-    Shares with a negative or cost equal to zero are ignored.
+    Shares with a negative cost or equal to zero are ignored.
     """
     with open(file) as f:
         read = reader(f)
@@ -48,12 +54,15 @@ def dataset(file):
     return share_list
 
 
+# Use the dataset 1 or dataset 2 files :
 share_list = dataset("datasets/dataset1_Python+P7.csv")
+
+# Dataset variable for the algorithm :
 datasets_actions_profit = [
     (x[0], float(x[1]), (float(x[1]) * float(x[2])) / 100) for x in share_list
 ]
 
-# (Action, Profit) in euros List of tuples :
+# 20 actions variables (converted percent to euros) :
 actions_profit = [
     (action[0], float(action[1]), (action[1] * action[2]) / 100) for action in actions
 ]

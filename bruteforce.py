@@ -1,6 +1,6 @@
 """
-bruteforce.py tries all combinations possible of actions that cost less
-than 500 euros and find the best profit in euros.
+bruteforce.py tries all combinations possible for 20 actions that cost less
+than 500 euros  in total and find the best profit in euros.
 The execution time for this method is also calculated.
 """
 
