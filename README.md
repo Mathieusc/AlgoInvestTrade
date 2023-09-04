@@ -2,7 +2,7 @@
 Résolvez des problèmes en utilisant des algorithmes en Python.
 
 ## AlgoInvest&Trade
-
+![AlgoInvest&Trade img](https://user.oc-static.com/upload/2020/09/18/1600429119334_P6.png)  
 Programme permettant de trouver la meilleure combinaison d'actions pour un budjet maximum de 500 euros.
 2 algorithmes sont utilisés: 
 - Force brute
